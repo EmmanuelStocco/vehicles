@@ -104,6 +104,34 @@ docker run -p 3000:3000 -v $(pwd)/vehicles.db:/app/vehicles.db backend-vehicles
 2. **Acessar a aplicação:**
 - Backend API: http://localhost:3000
 
+### Execução com Docker (Frontend)
+
+1. **Executar apenas o frontend com Docker:**
+```bash
+# Usando docker-compose
+docker-compose -f docker-compose-frontend.yml up --build
+
+# Ou usando Docker diretamente
+cd frontend
+docker build -t frontend-vehicles .
+docker run -p 80:80 frontend-vehicles
+```
+
+2. **Acessar a aplicação:**
+- Frontend: http://localhost
+
+### Execução com Docker (Completo - Backend + Frontend)
+
+1. **Executar ambos os serviços juntos:**
+```bash
+# Na pasta raiz do projeto
+docker-compose up --build
+```
+
+2. **Acessar as aplicações:**
+- Frontend: http://localhost (porta 80)
+- Backend API: http://localhost:3000
+
 
 ## 📚 API Endpoints
 
@@ -163,8 +191,12 @@ npm run test:cov
 │   │   ├── vehicle-list/   # Componente de listagem
 │   │   ├── services/       # Serviços HTTP
 │   │   └── models/         # Interfaces TypeScript
+│   ├── Dockerfile          # Configuração Docker
+│   ├── nginx.conf          # Configuração Nginx
+│   ├── .dockerignore       # Arquivos ignorados no Docker
 │   └── package.json
 ├── docker-compose-backend.yml  # Docker Compose para backend
+├── docker-compose-frontend.yml # Docker Compose para frontend
 └── README.md
 ```
 
