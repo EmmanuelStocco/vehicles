@@ -88,6 +88,22 @@ cd frontend
 npm start
 ```
 
+### Execução com Docker (Backend)
+
+1. **Executar apenas o backend com Docker:**
+```bash
+# Usando docker-compose
+docker-compose -f docker-compose-backend.yml up --build
+
+# Ou usando Docker diretamente
+cd backend
+docker build -t backend-vehicles .
+docker run -p 3000:3000 -v $(pwd)/vehicles.db:/app/vehicles.db backend-vehicles
+```
+
+2. **Acessar a aplicação:**
+- Backend API: http://localhost:3000
+
 
 ## 📚 API Endpoints
 
@@ -134,6 +150,8 @@ npm run test:cov
 │   │   ├── dto/            # DTOs de validação
 │   │   ├── vehicles/       # Módulo de veículos
 │   │   └── main.ts
+│   ├── Dockerfile          # Configuração Docker
+│   ├── .dockerignore       # Arquivos ignorados no Docker
 │   └── package.json
 ├── worker/                 # Microserviço worker
 │   ├── src/
@@ -146,6 +164,7 @@ npm run test:cov
 │   │   ├── services/       # Serviços HTTP
 │   │   └── models/         # Interfaces TypeScript
 │   └── package.json
+├── docker-compose-backend.yml  # Docker Compose para backend
 └── README.md
 ```
 
