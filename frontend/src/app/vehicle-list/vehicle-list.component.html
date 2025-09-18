@@ -1,0 +1,176 @@
+<div class="vehicle-list">
+  <div class="header-actions">
+    <button class="btn btn-primary" (click)="showCreateForm()">
+      + Novo Veículo
+    </button>
+  </div>
+
+  <div class="vehicle-form" *ngIf="showForm">
+    <h3>{{ editingVehicle ? 'Editar Veículo' : 'Novo Veículo' }}</h3>
+    
+    <form (ngSubmit)="saveVehicle()" #vehicleForm="ngForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="placa">Placa *</label>
+          <input 
+            type="text" 
+            id="placa" 
+            name="placa" 
+            [(ngModel)]="formData.placa" 
+            required 
+            minlength="7" 
+            maxlength="8"
+            #placa="ngModel"
+            class="form-control"
+            [class.is-invalid]="placa.invalid && placa.touched"
+          >
+          <div class="invalid-feedback" *ngIf="placa.invalid && placa.touched">
+            Placa deve ter entre 7 e 8 caracteres
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="chassi">Chassi *</label>
+          <input 
+            type="text" 
+            id="chassi" 
+            name="chassi" 
+            [(ngModel)]="formData.chassi" 
+            required 
+            minlength="17" 
+            maxlength="17"
+            #chassi="ngModel"
+            class="form-control"
+            [class.is-invalid]="chassi.invalid && chassi.touched"
+          >
+          <div class="invalid-feedback" *ngIf="chassi.invalid && chassi.touched">
+            Chassi deve ter exatamente 17 caracteres
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="renavam">Renavam *</label>
+          <input 
+            type="text" 
+            id="renavam" 
+            name="renavam" 
+            [(ngModel)]="formData.renavam" 
+            required 
+            minlength="9" 
+            maxlength="11"
+            #renavam="ngModel"
+            class="form-control"
+            [class.is-invalid]="renavam.invalid && renavam.touched"
+          >
+          <div class="invalid-feedback" *ngIf="renavam.invalid && renavam.touched">
+            Renavam deve ter entre 9 e 11 caracteres
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="modelo">Modelo *</label>
+          <input 
+            type="text" 
+            id="modelo" 
+            name="modelo" 
+            [(ngModel)]="formData.modelo" 
+            required
+            #modelo="ngModel"
+            class="form-control"
+            [class.is-invalid]="modelo.invalid && modelo.touched"
+          >
+          <div class="invalid-feedback" *ngIf="modelo.invalid && modelo.touched">
+            Modelo é obrigatório
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="marca">Marca *</label>
+          <input 
+            type="text" 
+            id="marca" 
+            name="marca" 
+            [(ngModel)]="formData.marca" 
+            required
+            #marca="ngModel"
+            class="form-control"
+            [class.is-invalid]="marca.invalid && marca.touched"
+          >
+          <div class="invalid-feedback" *ngIf="marca.invalid && marca.touched">
+            Marca é obrigatória
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="ano">Ano *</label>
+          <input 
+            type="number" 
+            id="ano" 
+            name="ano" 
+            [(ngModel)]="formData.ano" 
+            required 
+            min="1900"
+            #ano="ngModel"
+            class="form-control"
+            [class.is-invalid]="ano.invalid && ano.touched"
+          >
+          <div class="invalid-feedback" *ngIf="ano.invalid && ano.touched">
+            Ano deve ser válido
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-success" [disabled]="vehicleForm.invalid">
+          {{ editingVehicle ? 'Atualizar' : 'Criar' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="hideForm()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="vehicle-table" *ngIf="!showForm">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Placa</th>
+          <th>Chassi</th>
+          <th>Renavam</th>
+          <th>Modelo</th>
+          <th>Marca</th>
+          <th>Ano</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vehicle of vehicles">
+          <td>{{ vehicle.id }}</td>
+          <td>{{ vehicle.placa }}</td>
+          <td>{{ vehicle.chassi }}</td>
+          <td>{{ vehicle.renavam }}</td>
+          <td>{{ vehicle.modelo }}</td>
+          <td>{{ vehicle.marca }}</td>
+          <td>{{ vehicle.ano }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning" (click)="showEditForm(vehicle)">
+              Editar
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteVehicle(vehicle.id)">
+              Excluir
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="vehicles.length === 0">
+          <td colspan="8" class="text-center">Nenhum veículo encontrado</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
