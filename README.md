@@ -1,13 +1,14 @@
-# Sistema de Veículos
+# Sistema de Gestão de Veículos
 
-Sistema completo de CRUD de veículos com arquitetura de microserviços usando NestJS, Angular e RabbitMQ.
+Sistema completo de CRUD de veículos com arquitetura de microserviços usando NestJS, Angular e RabbitMQ. Implementa padrão Event-Driven Architecture para processamento assíncrono de operações.
 
 ## 🏗️ Arquitetura
 
-- **Backend**: NestJS com TypeORM e SQLite
-- **Worker**: Microserviço NestJS para processamento de eventos
+- **Backend**: API REST NestJS com TypeORM e SQLite
+- **Worker**: Microserviço NestJS para processamento assíncrono de eventos
 - **Frontend**: Angular 16+ com interface responsiva
 - **Message Broker**: RabbitMQ para comunicação entre serviços
+- **Containerização**: Docker para deploy e desenvolvimento
 
 ## 📋 Funcionalidades
 
@@ -23,6 +24,7 @@ Sistema completo de CRUD de veículos com arquitetura de microserviços usando N
 - ✅ Consumo de eventos do RabbitMQ
 - ✅ Processamento assíncrono de operações
 - ✅ Logs detalhados das operações
+- ✅ Simulação de processamento de 1 segundo
 
 ### Frontend (Angular)
 - ✅ Listagem de veículos
@@ -30,6 +32,22 @@ Sistema completo de CRUD de veículos com arquitetura de microserviços usando N
 - ✅ Validação de formulários
 - ✅ Interface responsiva e moderna
 - ✅ Integração com API REST
+
+## 🔄 Fluxo de Processamento
+
+1. **Frontend** → Envia requisição para **Backend**
+2. **Backend** → Processa operação CRUD no banco de dados
+3. **Backend** → Publica evento no **RabbitMQ**
+4. **Worker** → Consome evento do **RabbitMQ**
+5. **Worker** → Processa operação de forma assíncrona
+6. **Worker** → Registra logs de processamento
+
+### Exemplo de Logs:
+```
+Backend:  📤 Enviando evento de criação para o worker - Veículo ID: 123
+Worker:   📥 Processando requisição via RabbitMQ - Novo veículo criado (ID: 123)
+Worker:   ✅ Processamento concluído - Ação: CREATE | Veículo ID: 123
+```
 
 ## 🚀 Como Executar
 
@@ -120,9 +138,9 @@ docker run -p 80:80 frontend-vehicles
 2. **Acessar a aplicação:**
 - Frontend: http://localhost
 
-### Execução com Docker (Completo - Backend + Frontend)
+### Execução com Docker (Completo - Todos os Serviços)
 
-1. **Executar ambos os serviços juntos:**
+1. **Executar todos os serviços juntos:**
 ```bash
 # Na pasta raiz do projeto
 docker-compose up --build
@@ -132,6 +150,15 @@ docker-compose up --build
 - Frontend: http://localhost (porta 80)
 - Backend API: http://localhost:3000
 - RabbitMQ Management: http://localhost:15672 (admin/admin)
+
+3. **Verificar logs do worker:**
+```bash
+# Ver logs do worker em tempo real
+docker logs -f desafionovo-worker-1
+
+# Ver logs do backend
+docker logs -f desafionovo-backend-1
+```
 
 ### Execução com Docker (Microserviço Worker)
 
@@ -219,23 +246,32 @@ npm run test:cov
 ## 🔧 Tecnologias Utilizadas
 
 ### Backend
-- **NestJS** - Framework Node.js
+- **NestJS** - Framework Node.js para APIs REST
 - **TypeORM** - ORM para banco de dados
-- **SQLite** - Banco de dados
+- **SQLite** - Banco de dados leve e portável
 - **class-validator** - Validação de dados
 - **Jest** - Testes unitários
 - **RabbitMQ** - Message broker para microserviços
+- **AMQP** - Protocolo de mensageria
 
 ### Worker (Microserviço)
 - **NestJS Microservices** - Framework para microserviços
 - **RabbitMQ** - Message broker
+- **Event-Driven Architecture** - Padrão arquitetural
 - **AMQP** - Protocolo de mensageria
 
 ### Frontend
 - **Angular 16** - Framework frontend
-- **TypeScript** - Linguagem
+- **TypeScript** - Linguagem tipada
 - **SCSS** - Estilização
 - **RxJS** - Programação reativa
+- **HTTP Client** - Comunicação com API
+
+### Infraestrutura
+- **Docker** - Containerização
+- **Docker Compose** - Orquestração de containers
+- **Nginx** - Servidor web para frontend
+- **Node.js 18** - Runtime JavaScript
 
 
 ## 📝 Validações
@@ -262,13 +298,16 @@ npm run test:cov
 
 ## 🚀 Próximos Passos
 
-- [ ] Implementar autenticação/autorização
+- [ ] Implementar autenticação/autorização (JWT)
 - [ ] Adicionar paginação na listagem
-- [ ] Implementar filtros e busca
-- [ ] Adicionar logs estruturados
+- [ ] Implementar filtros e busca avançada
+- [ ] Adicionar logs estruturados (Winston)
 - [ ] Implementar cache Redis
 - [ ] Adicionar monitoramento (Prometheus/Grafana)
-- [ ] Implementar CI/CD
+- [ ] Implementar CI/CD (GitHub Actions)
+- [ ] Adicionar testes de integração
+- [ ] Implementar rate limiting
+- [ ] Adicionar documentação da API (Swagger)
 
 ## 📄 Licença
 

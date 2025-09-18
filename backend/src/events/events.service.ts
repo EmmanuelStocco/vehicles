@@ -1,12 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
 
+/**
+ * Serviço responsável por publicar eventos no RabbitMQ
+ * Utiliza padrão Publisher-Subscriber para comunicação assíncrona com o worker
+ */
 @Injectable()
 export class EventsService {
   private readonly logger = new Logger(EventsService.name);
   private client: ClientProxy;
 
   constructor() {
+    // Configuração do cliente RabbitMQ para publicação de eventos
     this.client = ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
@@ -19,30 +24,40 @@ export class EventsService {
     });
   }
 
+  /**
+   * Publica evento de criação de veículo no RabbitMQ
+   * O worker irá processar este evento de forma assíncrona
+   */
   async publishVehicleCreated(vehicle: any) {
     try {
       this.client.emit('vehicle_created', vehicle);
-      this.logger.log(`Evento vehicle_created publicado: ${JSON.stringify(vehicle)}`);
+      this.logger.log(`📤 Enviando evento de criação para o worker - Veículo ID: ${vehicle.id}`);
     } catch (error) {
-      this.logger.error(`Erro ao publicar evento vehicle_created: ${error.message}`);
+      this.logger.error(`❌ Falha ao enviar evento de criação: ${error.message}`);
     }
   }
 
+  /**
+   * Publica evento de atualização de veículo no RabbitMQ
+   */
   async publishVehicleUpdated(vehicle: any) {
     try {
       this.client.emit('vehicle_updated', vehicle);
-      this.logger.log(`Evento vehicle_updated publicado: ${JSON.stringify(vehicle)}`);
+      this.logger.log(`📤 Enviando evento de atualização para o worker - Veículo ID: ${vehicle.id}`);
     } catch (error) {
-      this.logger.error(`Erro ao publicar evento vehicle_updated: ${error.message}`);
+      this.logger.error(`❌ Falha ao enviar evento de atualização: ${error.message}`);
     }
   }
 
+  /**
+   * Publica evento de exclusão de veículo no RabbitMQ
+   */
   async publishVehicleDeleted(vehicleId: number) {
     try {
       this.client.emit('vehicle_deleted', { id: vehicleId });
-      this.logger.log(`Evento vehicle_deleted publicado: ${vehicleId}`);
+      this.logger.log(`📤 Enviando evento de exclusão para o worker - Veículo ID: ${vehicleId}`);
     } catch (error) {
-      this.logger.error(`Erro ao publicar evento vehicle_deleted: ${error.message}`);
+      this.logger.error(`❌ Falha ao enviar evento de exclusão: ${error.message}`);
     }
   }
 }

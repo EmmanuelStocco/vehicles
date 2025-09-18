@@ -6,6 +6,10 @@ import { CreateVehicleDto } from '../dto/create-vehicle.dto';
 import { UpdateVehicleDto } from '../dto/update-vehicle.dto';
 import { EventsService } from '../events/events.service';
 
+/**
+ * Serviço responsável pelas operações CRUD de veículos
+ * Integra com banco de dados SQLite e publica eventos para processamento assíncrono
+ */
 @Injectable()
 export class VehiclesService {
   constructor(
@@ -31,9 +35,7 @@ export class VehiclesService {
     const vehicle = this.vehicleRepository.create(createVehicleDto);
     const savedVehicle = await this.vehicleRepository.save(vehicle);
 
-    console.log('Veículo criado:', savedVehicle);
-
-    // Publicar evento para o worker processar
+    // Publicar evento para o worker processar de forma assíncrona
     await this.eventsService.publishVehicleCreated(savedVehicle);
 
     return savedVehicle;
@@ -74,9 +76,7 @@ export class VehiclesService {
     Object.assign(vehicle, updateVehicleDto);
     const updatedVehicle = await this.vehicleRepository.save(vehicle);
 
-    console.log('Veículo atualizado:', updatedVehicle);
-
-    // Publicar evento para o worker processar
+    // Publicar evento para o worker processar de forma assíncrona
     await this.eventsService.publishVehicleUpdated(updatedVehicle);
 
     return updatedVehicle;
@@ -86,9 +86,7 @@ export class VehiclesService {
     const vehicle = await this.findOne(id);
     await this.vehicleRepository.remove(vehicle);
 
-    console.log('Veículo deletado:', vehicle);
-
-    // Publicar evento para o worker processar
+    // Publicar evento para o worker processar de forma assíncrona
     await this.eventsService.publishVehicleDeleted(id);
   }
 }
