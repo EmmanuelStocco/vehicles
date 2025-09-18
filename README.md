@@ -131,6 +131,18 @@ docker-compose up --build
 2. **Acessar as aplicações:**
 - Frontend: http://localhost (porta 80)
 - Backend API: http://localhost:3000
+- RabbitMQ Management: http://localhost:15672 (admin/admin)
+
+### Execução com Docker (Microserviço Worker)
+
+1. **Executar worker com RabbitMQ:**
+```bash
+# Na pasta raiz do projeto
+docker-compose -f docker-compose-worker.yml up --build
+```
+
+2. **Acessar:**
+- RabbitMQ Management: http://localhost:15672 (admin/admin)
 
 
 ## 📚 API Endpoints
@@ -184,7 +196,10 @@ npm run test:cov
 ├── worker/                 # Microserviço worker
 │   ├── src/
 │   │   ├── vehicle-processor.service.ts
+│   │   ├── app.module.ts
 │   │   └── main.ts
+│   ├── Dockerfile          # Configuração Docker
+│   ├── .dockerignore       # Arquivos ignorados no Docker
 │   └── package.json
 ├── frontend/               # Aplicação Angular
 │   ├── src/app/
@@ -197,6 +212,7 @@ npm run test:cov
 │   └── package.json
 ├── docker-compose-backend.yml  # Docker Compose para backend
 ├── docker-compose-frontend.yml # Docker Compose para frontend
+├── docker-compose-worker.yml   # Docker Compose para worker + RabbitMQ
 └── README.md
 ```
 
@@ -208,7 +224,12 @@ npm run test:cov
 - **SQLite** - Banco de dados
 - **class-validator** - Validação de dados
 - **Jest** - Testes unitários
+- **RabbitMQ** - Message broker para microserviços
+
+### Worker (Microserviço)
+- **NestJS Microservices** - Framework para microserviços
 - **RabbitMQ** - Message broker
+- **AMQP** - Protocolo de mensageria
 
 ### Frontend
 - **Angular 16** - Framework frontend

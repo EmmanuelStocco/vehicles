@@ -7,7 +7,7 @@ export class VehicleProcessorService {
 
   @EventPattern('vehicle_created')
   async handleVehicleCreated(@Payload() data: any) {
-    this.logger.log(`Novo veículo criado: ${JSON.stringify(data)}`);
+    this.logger.log(`🎉 EVENTO RECEBIDO - Novo veículo criado: ${JSON.stringify(data)}`);
     
     // Aqui você pode implementar lógicas de processamento
     // como: enviar email, atualizar cache, gerar relatórios, etc.
@@ -18,7 +18,7 @@ export class VehicleProcessorService {
 
   @EventPattern('vehicle_updated')
   async handleVehicleUpdated(@Payload() data: any) {
-    this.logger.log(`Veículo atualizado: ${JSON.stringify(data)}`);
+    this.logger.log(`🎉 EVENTO RECEBIDO - Veículo atualizado: ${JSON.stringify(data)}`);
     
     // Simular processamento
     await this.simulateProcessing('UPDATE', data);
@@ -26,7 +26,7 @@ export class VehicleProcessorService {
 
   @EventPattern('vehicle_deleted')
   async handleVehicleDeleted(@Payload() data: any) {
-    this.logger.log(`Veículo deletado: ${JSON.stringify(data)}`);
+    this.logger.log(`🎉 EVENTO RECEBIDO - Veículo deletado: ${JSON.stringify(data)}`);
     
     // Simular processamento
     await this.simulateProcessing('DELETE', data);
@@ -37,6 +37,15 @@ export class VehicleProcessorService {
     return new Promise(resolve => {
       setTimeout(() => {
         this.logger.log(`Processamento concluído para ação ${action} do veículo ${data.id}`);
+        
+        // Aqui você pode implementar lógicas específicas:
+        // - Enviar notificações por email
+        // - Atualizar cache Redis
+        // - Gerar relatórios
+        // - Integrar com sistemas externos
+        // - Logs de auditoria
+        // - etc.
+        
         resolve(true);
       }, 1000);
     });

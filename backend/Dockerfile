@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar todas as dependências (incluindo devDependencies para build)
-RUN npm ci && npm cache clean --force
+RUN npm ci --legacy-peer-deps && npm cache clean --force
 
 # Copiar código fonte
 COPY . .
@@ -20,7 +20,7 @@ COPY . .
 RUN npm run build
 
 # Remover dependências de desenvolvimento após o build
-RUN npm prune --production
+RUN npm prune --production --legacy-peer-deps
 
 # Criar usuário não-root para segurança
 RUN addgroup -g 1001 -S nodejs

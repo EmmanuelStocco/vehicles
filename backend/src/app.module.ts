@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VehiclesModule } from './vehicles/vehicles.module';
+import { EventsModule } from './events/events.module';
 import { Vehicle } from './entities/vehicle.entity';
 
 @Module({
@@ -12,6 +13,7 @@ import { Vehicle } from './entities/vehicle.entity';
       synchronize: true,
     }),
     VehiclesModule,
+    EventsModule,
   ],
 })
 export class AppModule {}

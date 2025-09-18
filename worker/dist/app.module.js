@@ -8,25 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
-const vehicles_module_1 = require("./vehicles/vehicles.module");
-const events_module_1 = require("./events/events.module");
-const vehicle_entity_1 = require("./entities/vehicle.entity");
+const vehicle_processor_service_1 = require("./vehicle-processor.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forRoot({
-                type: 'sqlite',
-                database: 'vehicles.db',
-                entities: [vehicle_entity_1.Vehicle],
-                synchronize: true,
-            }),
-            vehicles_module_1.VehiclesModule,
-            events_module_1.EventsModule,
-        ],
+        providers: [vehicle_processor_service_1.VehicleProcessorService],
+        controllers: [vehicle_processor_service_1.VehicleProcessorService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

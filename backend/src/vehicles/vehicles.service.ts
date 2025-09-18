@@ -4,12 +4,14 @@ import { Repository } from 'typeorm';
 import { Vehicle } from '../entities/vehicle.entity';
 import { CreateVehicleDto } from '../dto/create-vehicle.dto';
 import { UpdateVehicleDto } from '../dto/update-vehicle.dto';
+import { EventsService } from '../events/events.service';
 
 @Injectable()
 export class VehiclesService {
   constructor(
     @InjectRepository(Vehicle)
     private vehicleRepository: Repository<Vehicle>,
+    private eventsService: EventsService,
   ) {}
 
   async create(createVehicleDto: CreateVehicleDto): Promise<Vehicle> {
@@ -30,6 +32,9 @@ export class VehiclesService {
     const savedVehicle = await this.vehicleRepository.save(vehicle);
 
     console.log('Veículo criado:', savedVehicle);
+
+    // Publicar evento para o worker processar
+    await this.eventsService.publishVehicleCreated(savedVehicle);
 
     return savedVehicle;
   }
@@ -71,6 +76,9 @@ export class VehiclesService {
 
     console.log('Veículo atualizado:', updatedVehicle);
 
+    // Publicar evento para o worker processar
+    await this.eventsService.publishVehicleUpdated(updatedVehicle);
+
     return updatedVehicle;
   }
 
@@ -79,5 +87,8 @@ export class VehiclesService {
     await this.vehicleRepository.remove(vehicle);
 
     console.log('Veículo deletado:', vehicle);
+
+    // Publicar evento para o worker processar
+    await this.eventsService.publishVehicleDeleted(id);
   }
 }
