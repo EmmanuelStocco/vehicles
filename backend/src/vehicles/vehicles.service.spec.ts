@@ -6,10 +6,12 @@ import { VehiclesService } from './vehicles.service';
 import { Vehicle } from '../entities/vehicle.entity';
 import { CreateVehicleDto } from '../dto/create-vehicle.dto';
 import { UpdateVehicleDto } from '../dto/update-vehicle.dto';
+import { EventsService } from '../events/events.service';
 
 describe('VehiclesService', () => {
   let service: VehiclesService;
   let repository: Repository<Vehicle>;
+  let eventsService: EventsService;
 
   const mockRepository = {
     create: jest.fn(),
@@ -17,6 +19,12 @@ describe('VehiclesService', () => {
     find: jest.fn(),
     findOne: jest.fn(),
     remove: jest.fn(),
+  };
+
+  const mockEventsService = {
+    publishVehicleCreated: jest.fn(),
+    publishVehicleUpdated: jest.fn(),
+    publishVehicleDeleted: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -27,11 +35,16 @@ describe('VehiclesService', () => {
           provide: getRepositoryToken(Vehicle),
           useValue: mockRepository,
         },
+        {
+          provide: EventsService,
+          useValue: mockEventsService,
+        },
       ],
     }).compile();
 
     service = module.get<VehiclesService>(VehiclesService);
     repository = module.get<Repository<Vehicle>>(getRepositoryToken(Vehicle));
+    eventsService = module.get<EventsService>(EventsService);
   });
 
   afterEach(() => {
@@ -70,6 +83,7 @@ describe('VehiclesService', () => {
       });
       expect(mockRepository.create).toHaveBeenCalledWith(createVehicleDto);
       expect(mockRepository.save).toHaveBeenCalledWith(vehicle);
+      expect(mockEventsService.publishVehicleCreated).toHaveBeenCalledWith(vehicle);
       expect(result).toEqual(vehicle);
     });
 
@@ -135,6 +149,7 @@ describe('VehiclesService', () => {
       const result = await service.update(1, updateVehicleDto);
 
       expect(mockRepository.save).toHaveBeenCalledWith(updatedVehicle);
+      expect(mockEventsService.publishVehicleUpdated).toHaveBeenCalledWith(updatedVehicle);
       expect(result).toEqual(updatedVehicle);
     });
 
@@ -156,6 +171,7 @@ describe('VehiclesService', () => {
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({ where: { id: 1 } });
       expect(mockRepository.remove).toHaveBeenCalledWith(vehicle);
+      expect(mockEventsService.publishVehicleDeleted).toHaveBeenCalledWith(1);
     });
 
     it('should throw NotFoundException when vehicle not found', async () => {
