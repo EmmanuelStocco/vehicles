@@ -8,7 +8,6 @@ Sistema completo de CRUD de veículos com arquitetura de microserviços usando N
 - **Worker**: Microserviço NestJS para processamento de eventos
 - **Frontend**: Angular 16+ com interface responsiva
 - **Message Broker**: RabbitMQ para comunicação entre serviços
-- **Containerização**: Docker e Docker Compose
 
 ## 📋 Funcionalidades
 
@@ -36,7 +35,6 @@ Sistema completo de CRUD de veículos com arquitetura de microserviços usando N
 
 ### Pré-requisitos
 - Node.js 18+
-- Docker e Docker Compose (opcional)
 
 ### Execução Local
 
@@ -60,12 +58,16 @@ npm install
 
 4. **Instalar e executar RabbitMQ:**
 ```bash
-# Usando Docker
-docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
-
-# Ou instalar localmente (Ubuntu/Debian)
+# Instalar localmente (Ubuntu/Debian)
 sudo apt-get install rabbitmq-server
 sudo systemctl start rabbitmq-server
+
+# Ou usando Homebrew (macOS)
+brew install rabbitmq
+brew services start rabbitmq
+
+# Ou baixar e executar manualmente
+# https://www.rabbitmq.com/download.html
 ```
 
 5. **Executar o backend:**
@@ -86,17 +88,6 @@ cd frontend
 npm start
 ```
 
-### Execução com Docker
-
-1. **Executar todos os serviços:**
-```bash
-docker-compose up --build
-```
-
-2. **Acessar as aplicações:**
-- Frontend: http://localhost
-- Backend API: http://localhost:3000
-- RabbitMQ Management: http://localhost:15672 (admin/admin)
 
 ## 📚 API Endpoints
 
@@ -143,22 +134,18 @@ npm run test:cov
 │   │   ├── dto/            # DTOs de validação
 │   │   ├── vehicles/       # Módulo de veículos
 │   │   └── main.ts
-│   ├── Dockerfile
 │   └── package.json
 ├── worker/                 # Microserviço worker
 │   ├── src/
 │   │   ├── vehicle-processor.service.ts
 │   │   └── main.ts
-│   ├── Dockerfile
 │   └── package.json
 ├── frontend/               # Aplicação Angular
 │   ├── src/app/
 │   │   ├── vehicle-list/   # Componente de listagem
 │   │   ├── services/       # Serviços HTTP
 │   │   └── models/         # Interfaces TypeScript
-│   ├── Dockerfile
 │   └── package.json
-├── docker-compose.yml      # Orquestração dos containers
 └── README.md
 ```
 
@@ -178,10 +165,6 @@ npm run test:cov
 - **SCSS** - Estilização
 - **RxJS** - Programação reativa
 
-### DevOps
-- **Docker** - Containerização
-- **Docker Compose** - Orquestração
-- **Nginx** - Proxy reverso
 
 ## 📝 Validações
 
