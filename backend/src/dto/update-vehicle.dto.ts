@@ -1,5 +1,3 @@
-import { CreateVehicleDto } from './create-vehicle.dto';
-
 export class UpdateVehicleDto {
   placa?: string;
   chassi?: string;

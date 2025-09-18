@@ -35,7 +35,11 @@ export class VehiclesController {
   }
 
   @Patch(':id')
-  @UsePipes(new ValidationPipe({ transform: true }))
+  @UsePipes(new ValidationPipe({ 
+    transform: true, 
+    whitelist: false, 
+    forbidNonWhitelisted: false 
+  }))
   update(@Param('id', ParseIntPipe) id: number, @Body() updateVehicleDto: UpdateVehicleDto) {
     return this.vehiclesService.update(id, updateVehicleDto);
   }
