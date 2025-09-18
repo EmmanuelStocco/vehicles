@@ -19,6 +19,8 @@ build/
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # OS
 .DS_Store
@@ -28,8 +30,38 @@ Thumbs.db
 logs/
 *.log
 
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
 # Coverage directory used by tools like istanbul
 coverage/
 
 # nyc test coverage
 .nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+tmp/
+temp/
